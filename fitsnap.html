@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FitSnap — Fitness that fits your life.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --charcoal:#101214;
+  --charcoal-card:#181C1F;
+  --lime:#C7FF4A;
+  --lime-dim:#a8e02f;
+  --mint:#E8F5D0;
+  --offwhite:#F5F6F0;
+  --white:#FFFFFF;
+  --muted:#6F7478;
+  --border:#E3E6DF;
+  --bg:var(--offwhite);
+  --surface:var(--white);
+  --text:var(--charcoal);
+  --text-muted:var(--muted);
+  --border-c:var(--border);
+  --radius-lg:28px;
+  --radius-md:18px;
+  --radius-sm:12px;
+}
+[data-theme="dark"]{
+  --bg:#101214;
+  --surface:#181C1F;
+  --text:#F7F8F3;
+  --text-muted:#9BA0A3;
+  --border-c:#262B2E;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Manrope', -apple-system, sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  transition:background .35s ease, color .35s ease;
+  overflow-x:hidden;
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+}
+img,svg{display:block;}
+button{font-family:inherit; cursor:pointer;}
+a{color:inherit; text-decoration:none;}
+.wrap{max-width:1280px; margin:0 auto; padding:0 32px;}
+@media (max-width:640px){.wrap{padding:0 20px;}}
+
+/* ---------- NAV ---------- */
+.nav{
+  position:sticky; top:0; z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:20px 32px;
+  transition:background .3s ease, backdrop-filter .3s ease, box-shadow .3s ease;
+}
+.nav.scrolled{
+  background:color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter:blur(14px);
+  box-shadow:0 1px 0 var(--border-c);
+}
+.nav-logo{font-weight:800; font-size:20px; letter-spacing:-0.02em;}
+.nav-center{display:flex; gap:32px; font-weight:600; font-size:15px; color:var(--text-muted);}
+.nav-center a{transition:color .2s ease;}
+.nav-center a:hover{color:var(--text);}
+.nav-right{display:flex; align-items:center; gap:14px;}
+.btn{
+  border:none; border-radius:16px; font-weight:700; font-size:15px;
+  padding:12px 22px; transition:transform .2s ease, background .25s ease, color .25s ease;
+  display:inline-flex; align-items:center; gap:8px; white-space:nowrap;
+}
+.btn:active{transform:scale(0.96);}
+.btn-primary{background:var(--charcoal); color:var(--white);}
+.btn-primary:hover{background:var(--lime); color:var(--charcoal); transform:scale(1.02);}
+[data-theme="dark"] .btn-primary{background:var(--lime); color:var(--charcoal);}
+[data-theme="dark"] .btn-primary:hover{background:var(--white);}
+.btn-ghost{background:transparent; color:var(--text); font-weight:700;}
+.btn-ghost:hover{color:var(--text-muted);}
+.btn-outline{background:transparent; border:1.5px solid var(--border-c); color:var(--text);}
+.btn-outline:hover{border-color:var(--text); transform:scale(1.02);}
+.icon-btn{
+  width:38px; height:38px; border-radius:12px; border:1px solid var(--border-c);
+  background:var(--surface); display:flex; align-items:center; justify-content:center;
+  transition:transform .2s ease;
+}
+.icon-btn:hover{transform:scale(1.06);}
+.hamburger{display:none;}
+@media (max-width:860px){
+  .nav-center{display:none;}
+  .nav-right .btn-ghost{display:none;}
+}
+
+/* ---------- HERO ---------- */
+.hero{padding:64px 32px 40px; position:relative;}
+.hero-grid{
+  display:grid; grid-template-columns:1.05fr 1fr; gap:56px; align-items:center;
+  max-width:1280px; margin:0 auto;
+}
+@media (max-width:960px){.hero-grid{grid-template-columns:1fr; gap:48px;}}
+.badge{
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--mint); color:#3c5a12; font-weight:700; font-size:13px;
+  padding:8px 16px; border-radius:999px; margin-bottom:24px;
+}
+[data-theme="dark"] .badge{background:#22301a; color:var(--lime);}
+.hero h1{
+  font-size:clamp(38px, 5.4vw, 64px); font-weight:800; line-height:1.03;
+  letter-spacing:-0.03em; margin-bottom:24px;
+}
+.hero h1 .fade{
+  display:block; opacity:0; transform:translateY(18px);
+  animation:riseIn .6s ease forwards;
+}
+.hero h1 .fade:nth-child(2){animation-delay:.12s;}
+@keyframes riseIn{to{opacity:1; transform:translateY(0);}}
+.hero p.sub{
+  font-size:19px; color:var(--text-muted); max-width:440px; line-height:1.5; margin-bottom:32px;
+}
+.hero-ctas{display:flex; gap:14px; flex-wrap:wrap;}
+.hero-ctas .btn{padding:16px 26px; font-size:16px;}
+
+/* mockup */
+.mock-wrap{position:relative; display:flex; justify-content:center; align-items:center; min-height:420px;}
+.mock-glow{
+  position:absolute; width:420px; height:420px; border-radius:50%;
+  background:radial-gradient(circle, rgba(199,255,74,0.35), transparent 70%);
+  filter:blur(10px); animation:pulseGlow 6s ease-in-out infinite;
+}
+@keyframes pulseGlow{0%,100%{opacity:.6; transform:scale(1);}50%{opacity:.9; transform:scale(1.08);}}
+.mock-ring{
+  position:absolute; width:340px; height:340px; border-radius:50%;
+  border:1.5px dashed rgba(16,18,20,0.15);
+}
+[data-theme="dark"] .mock-ring{border-color:rgba(247,248,243,0.15);}
+.mission-card{
+  position:relative; width:300px; background:var(--charcoal); color:var(--white);
+  border-radius:var(--radius-lg); padding:30px 26px; z-index:2;
+  box-shadow:0 24px 60px -20px rgba(16,18,20,0.45);
+  transition:transform .25s ease;
+}
+.mission-card:hover{transform:translateY(-4px) scale(1.01);}
+.mission-eyebrow{font-size:12px; font-weight:700; color:#9BA0A3; letter-spacing:0.02em; margin-bottom:14px;}
+.mission-time{font-size:46px; font-weight:800; letter-spacing:-0.02em; color:var(--lime); line-height:1;}
+.mission-title{font-size:21px; font-weight:800; margin:10px 0 16px;}
+.mission-tags{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:24px;}
+.tag{
+  font-size:12px; font-weight:700; padding:6px 12px; border-radius:999px;
+  background:rgba(255,255,255,0.08); color:#D8DBD5;
+}
+.mission-card .btn-primary{width:100%; justify-content:center; background:var(--lime); color:var(--charcoal); padding:14px;}
+.mission-card .btn-primary:hover{background:var(--white);}
+.float-card{
+  position:absolute; background:var(--surface); border:1px solid var(--border-c);
+  border-radius:16px; padding:12px 16px; font-weight:700; font-size:13px;
+  box-shadow:0 12px 30px -12px rgba(16,18,20,0.2); z-index:3;
+  animation:floaty 5s ease-in-out infinite;
+}
+.float-1{top:6%; left:-6%; animation-delay:0s;}
+.float-2{bottom:14%; right:-8%; animation-delay:1.2s;}
+.float-3{top:44%; right:-14%; animation-delay:2.4s;}
+@keyframes floaty{0%,100%{transform:translateY(0px);}50%{transform:translateY(-10px);}}
+@media (max-width:640px){.float-card{display:none;}}
+
+/* social proof */
+.strip{padding:30px 0; border-top:1px solid var(--border-c); border-bottom:1px solid var(--border-c); overflow:hidden;}
+.strip-inner{display:flex; align-items:center; gap:14px; white-space:nowrap; font-weight:700; color:var(--text-muted); font-size:14px;}
+.strip-inner b{color:var(--text);}
+.strip-track{display:flex; gap:48px; animation:scrollX 22s linear infinite;}
+@media (min-width:769px){.strip-track{animation:none; justify-content:center; width:100%;}}
+@keyframes scrollX{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* section generic */
+.section{padding:100px 32px;}
+@media (max-width:640px){.section{padding:64px 20px;}}
+.section-head{max-width:640px; margin-bottom:56px;}
+.section-head h2{font-size:clamp(30px,4vw,44px); font-weight:800; letter-spacing:-0.02em; line-height:1.08;}
+.section-head p{font-size:17px; color:var(--text-muted); margin-top:16px; max-width:480px;}
+.reveal{opacity:0; transform:translateY(20px); transition:opacity .6s ease, transform .6s ease;}
+.reveal.in{opacity:1; transform:translateY(0);}
+
+/* how it works */
+.steps{display:grid; grid-template-columns:repeat(3,1fr); gap:24px;}
+@media (max-width:860px){.steps{grid-template-columns:1fr;}}
+.step-card{
+  background:var(--surface); border:1px solid var(--border-c); border-radius:var(--radius-lg);
+  padding:32px; transition:transform .25s ease;
+}
+.step-card:hover{transform:translateY(-4px);}
+.step-num{font-size:14px; font-weight:800; color:var(--lime-dim); margin-bottom:18px;}
+[data-theme="dark"] .step-num{color:var(--lime);}
+.step-card h3{font-size:20px; font-weight:800; margin-bottom:10px;}
+.step-card p{color:var(--text-muted); font-size:15px; line-height:1.55;}
+.step-list{margin-top:14px; display:flex; flex-wrap:wrap; gap:8px;}
+
+/* day is the workout plan */
+.situations{display:flex; flex-wrap:wrap; gap:12px; margin-bottom:36px;}
+.sit-btn{
+  padding:14px 20px; border-radius:16px; border:1.5px solid var(--border-c); background:var(--surface);
+  font-weight:700; font-size:15px; transition:all .2s ease;
+}
+.sit-btn:hover{transform:translateY(-2px);}
+.sit-btn.active{background:var(--charcoal); color:var(--white); border-color:var(--charcoal);}
+[data-theme="dark"] .sit-btn.active{background:var(--lime); color:var(--charcoal); border-color:var(--lime);}
+.preview-card{
+  background:var(--surface); border:1px solid var(--border-c); border-radius:var(--radius-lg);
+  padding:36px; max-width:520px; transition:opacity .3s ease;
+}
+.preview-card.fading{opacity:0;}
+.preview-title{font-size:26px; font-weight:800; margin-bottom:14px; letter-spacing:-0.01em;}
+.preview-tags{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px;}
+.ex-row{display:flex; align-items:center; gap:12px; padding:10px 0; border-top:1px solid var(--border-c); font-weight:600; font-size:15px;}
+.ex-row:first-of-type{border-top:none;}
+.ex-dot{width:8px; height:8px; border-radius:50%; background:var(--lime-dim); flex-shrink:0;}
+[data-theme="dark"] .ex-dot{background:var(--lime);}
+
+/* 5 minute */
+.five-wrap{
+  background:var(--charcoal); color:var(--white); border-radius:36px; padding:64px 48px;
+  display:grid; grid-template-columns:1fr auto; gap:40px; align-items:center; position:relative; overflow:hidden;
+}
+@media (max-width:860px){.five-wrap{grid-template-columns:1fr; text-align:center; padding:48px 28px;}}
+.five-wrap h2{font-size:clamp(30px,4.4vw,46px); font-weight:800; line-height:1.05; letter-spacing:-0.02em;}
+.timer-ring{position:relative; width:220px; height:220px; margin:0 auto;}
+.timer-ring svg{transform:rotate(-90deg);}
+.timer-ring .bg-ring{stroke:rgba(255,255,255,0.12);}
+.timer-ring .fg-ring{stroke:var(--lime); stroke-linecap:round; transition:stroke-dashoffset 1s linear;}
+.timer-label{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;}
+.timer-num{font-size:38px; font-weight:800; font-variant-numeric:tabular-nums;}
+.timer-ex{font-size:13px; color:#B9BDB8; margin-top:4px; font-weight:700;}
+.timer-controls{display:flex; gap:10px; justify-content:center; margin-top:20px;}
+.timer-controls button{
+  padding:10px 18px; border-radius:12px; border:1px solid rgba(255,255,255,0.2); background:transparent; color:var(--white); font-weight:700; font-size:13px;
+}
+.timer-controls button:hover{background:rgba(255,255,255,0.08);}
+.timer-controls .primary{background:var(--lime); color:var(--charcoal); border-color:var(--lime);}
+
+/* AI generator */
+.ai-card{
+  background:var(--surface); border:1px solid var(--border-c); border-radius:var(--radius-lg);
+  padding:40px; max-width:640px; position:relative;
+}
+.ai-input-row{display:flex; gap:10px; margin-top:22px; flex-wrap:wrap;}
+.ai-input{
+  flex:1; min-width:220px; border:1.5px solid var(--border-c); border-radius:16px; padding:16px 18px;
+  font-family:inherit; font-size:15px; background:var(--bg); color:var(--text);
+}
+.ai-thinking{margin-top:24px; display:none; flex-direction:column; gap:10px;}
+.ai-thinking.show{display:flex;}
+.think-line{display:flex; align-items:center; gap:10px; font-size:14px; font-weight:600; color:var(--text-muted); opacity:0; animation:fadeUp .4s ease forwards;}
+@keyframes fadeUp{to{opacity:1;}}
+.think-dot{width:6px; height:6px; border-radius:50%; background:var(--lime-dim); animation:blink 1s ease-in-out infinite;}
+[data-theme="dark"] .think-dot{background:var(--lime);}
+@keyframes blink{0%,100%{opacity:.3;}50%{opacity:1;}}
+.ai-result{margin-top:24px; display:none;}
+.ai-result.show{display:block; animation:riseIn .5s ease;}
+.result-header{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:18px; flex-wrap:wrap; gap:10px;}
+.result-title{font-size:22px; font-weight:800;}
+.block-label{font-size:12px; font-weight:800; letter-spacing:0.03em; color:var(--text-muted); margin:18px 0 8px;}
+.ex-card{
+  display:flex; justify-content:space-between; align-items:center; padding:12px 16px;
+  background:var(--bg); border-radius:12px; margin-bottom:8px; font-weight:700; font-size:14px;
+}
+.ex-card span.dur{color:var(--text-muted); font-weight:700;}
+
+/* surprise me */
+.surprise-box{
+  background:var(--mint); border-radius:var(--radius-lg); padding:56px; text-align:center; position:relative; overflow:hidden;
+}
+[data-theme="dark"] .surprise-box{background:#1c2416;}
+.dice-btn{
+  font-size:18px; padding:20px 40px; border-radius:20px; background:var(--charcoal); color:var(--white);
+  font-weight:800; border:none; transition:transform .3s ease;
+}
+[data-theme="dark"] .dice-btn{background:var(--lime); color:var(--charcoal);}
+.dice-btn.spin{animation:spinPulse .5s ease;}
+@keyframes spinPulse{0%{transform:rotate(0);}50%{transform:rotate(-8deg) scale(1.05);}100%{transform:rotate(0);}}
+.surprise-result{margin-top:32px; display:none;}
+.surprise-result.show{display:block; animation:riseIn .5s ease;}
+.surprise-card{
+  background:var(--surface); border-radius:var(--radius-md); padding:26px; max-width:380px; margin:0 auto;
+  box-shadow:0 20px 40px -20px rgba(16,18,20,0.25);
+}
+
+/* mode cards */
+.modes{display:grid; grid-template-columns:1fr 1fr; gap:24px;}
+@media (max-width:860px){.modes{grid-template-columns:1fr;}}
+.mode-card{
+  border-radius:var(--radius-lg); padding:40px; position:relative; overflow:hidden;
+}
+.mode-travel{background:#101214; color:#fff;}
+.mode-office{background:var(--mint); color:var(--charcoal);}
+[data-theme="dark"] .mode-office{background:#1c2416;}
+.mode-card h3{font-size:26px; font-weight:800; margin-bottom:12px; letter-spacing:-0.01em;}
+.mode-card p.desc{opacity:0.75; margin-bottom:22px; font-size:15px;}
+.mode-tags{display:flex; flex-wrap:wrap; gap:8px;}
+
+/* final CTA */
+.final-cta{background:var(--charcoal); color:var(--white); border-radius:36px; padding:80px 48px; text-align:center;}
+.final-cta h2{font-size:clamp(30px,5vw,50px); font-weight:800; line-height:1.06; letter-spacing:-0.02em; margin-bottom:18px;}
+.final-cta p{color:#B9BDB8; font-size:17px; margin-bottom:32px;}
+.enabled-row{display:flex; align-items:center; justify-content:center; gap:8px; margin-top:20px; font-size:13px; color:#9BA0A3; font-weight:700;}
+.dot-pulse{width:8px; height:8px; border-radius:50%; background:var(--lime); animation:blink 1.4s ease-in-out infinite;}
+
+/* footer */
+footer{padding:56px 32px 40px; border-top:1px solid var(--border-c);}
+.footer-inner{display:flex; justify-content:space-between; flex-wrap:wrap; gap:32px; max-width:1280px; margin:0 auto;}
+.footer-links{display:flex; gap:28px; flex-wrap:wrap; font-weight:600; font-size:14px; color:var(--text-muted);}
+.footer-disclaimer{font-size:12px; color:var(--text-muted); margin-top:20px; max-width:520px;}
+
+/* =============== APP SHELL =============== */
+#appShell{display:none; min-height:100vh; background:var(--bg);}
+#appShell.active{display:block;}
+.app-layout{display:grid; grid-template-columns:250px 1fr; min-height:100vh;}
+@media (max-width:860px){.app-layout{grid-template-columns:1fr;}}
+.sidebar{
+  border-right:1px solid var(--border-c); padding:28px 20px; display:flex; flex-direction:column; gap:6px;
+  position:sticky; top:0; height:100vh;
+}
+@media (max-width:860px){.sidebar{display:none;}}
+.sb-logo{font-weight:800; font-size:19px; margin-bottom:28px; padding:0 8px;}
+.sb-link{
+  display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:12px; font-weight:700; font-size:14.5px;
+  color:var(--text-muted); transition:all .2s ease;
+}
+.sb-link:hover{background:var(--surface); color:var(--text);}
+.sb-link.active{background:var(--charcoal); color:var(--white);}
+[data-theme="dark"] .sb-link.active{background:var(--lime); color:var(--charcoal);}
+.sb-icon{width:18px; height:18px; flex-shrink:0;}
+.sb-bottom{margin-top:auto; display:flex; flex-direction:column; gap:6px; border-top:1px solid var(--border-c); padding-top:16px;}
+
+.app-main{padding:32px 40px 80px;}
+@media (max-width:640px){.app-main{padding:20px 18px 100px;}}
+.app-topbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;}
+.app-topbar .icon-btn{margin-left:8px;}
+.mobile-top{display:none;}
+@media (max-width:860px){
+  .mobile-top{display:flex; justify-content:space-between; align-items:center; padding:16px 18px; border-bottom:1px solid var(--border-c); position:sticky; top:0; background:var(--bg); z-index:20;}
+}
+.bottom-nav{display:none;}
+@media (max-width:860px){
+  .bottom-nav{
+    display:flex; position:fixed; bottom:0; left:0; right:0; background:var(--surface);
+    border-top:1px solid var(--border-c); padding:8px 6px calc(8px + env(safe-area-inset-bottom));
+    justify-content:space-around; z-index:30;
+  }
+  .bn-link{display:flex; flex-direction:column; align-items:center; gap:4px; font-size:10.5px; font-weight:700; color:var(--text-muted); padding:6px 10px; min-width:44px; min-height:44px; justify-content:center;}
+  .bn-link.active{color:var(--text);}
+  .bn-link svg{width:20px; height:20px;}
+}
+
+.view{display:none;}
+.view.active{display:block; animation:riseIn .4s ease;}
+
+.greet h1{font-size:30px; font-weight:800; letter-spacing:-0.02em;}
+.greet p{color:var(--text-muted); margin-top:6px; font-size:15px;}
+
+.today-mission{
+  margin-top:28px; background:var(--charcoal); color:var(--white); border-radius:var(--radius-lg);
+  padding:36px; display:flex; justify-content:space-between; align-items:center; gap:24px; flex-wrap:wrap;
+  --mx:50%; --my:50%;
+  background-image:radial-gradient(500px circle at var(--mx) var(--my), rgba(199,255,74,0.15), transparent 60%), var(--charcoal-grad, none);
+}
+.today-mission .left .eyebrow{color:#9BA0A3; font-weight:700; font-size:13px; margin-bottom:10px;}
+.today-mission .time{font-size:44px; font-weight:800; color:var(--lime); line-height:1;}
+.today-mission .title{font-size:24px; font-weight:800; margin:8px 0 14px;}
+
+.qa-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:14px; margin-top:28px;}
+@media (max-width:960px){.qa-grid{grid-template-columns:repeat(3,1fr);}}
+@media (max-width:560px){.qa-grid{grid-template-columns:repeat(2,1fr);}}
+.qa-card{
+  background:var(--surface); border:1px solid var(--border-c); border-radius:18px; padding:20px 16px;
+  display:flex; flex-direction:column; gap:14px; transition:transform .2s ease;
+}
+.qa-card:hover{transform:translateY(-4px);}
+.qa-icon{font-size:22px; transition:transform .2s ease;}
+.qa-card:hover .qa-icon{transform:rotate(4deg);}
+.qa-card .qa-label{font-weight:700; font-size:13.5px;}
+.qa-arrow{font-size:14px; transition:transform .2s ease; color:var(--text-muted);}
+.qa-card:hover .qa-arrow{transform:translateX(4px); color:var(--text);}
+
+.feel-row{display:flex; gap:12px; margin-top:14px;}
+.feel-btn{
+  flex:1; padding:16px; border-radius:16px; border:1.5px solid var(--border-c); background:var(--surface);
+  font-weight:700; font-size:14px; text-align:center; transition:all .2s ease;
+}
+.feel-btn.active{border-color:var(--charcoal); background:var(--mint);}
+[data-theme="dark"] .feel-btn.active{border-color:var(--lime); background:#1c2416;}
+.feel-msg{margin-top:10px; font-size:13.5px; color:var(--lime-dim); font-weight:700; display:none;}
+[data-theme="dark"] .feel-msg{color:var(--lime);}
+.feel-msg.show{display:block;}
+
+.grid-2col{display:grid; grid-template-columns:1.3fr 1fr; gap:20px; margin-top:32px;}
+@media (max-width:860px){.grid-2col{grid-template-columns:1fr;}}
+.card{background:var(--surface); border:1px solid var(--border-c); border-radius:var(--radius-lg); padding:28px;}
+.week-row{display:grid; grid-template-columns:repeat(7,1fr); gap:8px; margin:18px 0;}
+.week-day{display:flex; flex-direction:column; align-items:center; gap:8px; font-size:11px; font-weight:700; color:var(--text-muted);}
+.week-dot{width:26px; height:26px; border-radius:50%; border:2px solid var(--border-c); transform:scale(0); transition:transform .3s ease, background .3s ease;}
+.week-dot.filled{background:var(--lime-dim); border-color:var(--lime-dim); transform:scale(1);}
+[data-theme="dark"] .week-dot.filled{background:var(--lime); border-color:var(--lime);}
+.week-dot.pop{transform:scale(1);}
+.stat-row{display:flex; gap:16px; flex-wrap:wrap;}
+.stat{flex:1; min-width:90px;}
+.stat .num{font-size:26px; font-weight:800;}
+.stat .lbl{font-size:12px; color:var(--text-muted); font-weight:700; margin-top:2px;}
+
+/* AI coach */
+.chat-wrap{display:flex; flex-direction:column; height:calc(100vh - 220px); min-height:420px;}
+.chat-log{flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:12px; padding:10px 2px;}
+.msg{max-width:78%; padding:13px 17px; border-radius:18px; font-size:14.5px; line-height:1.5; opacity:0; transform:translateY(10px); animation:msgIn .35s ease forwards;}
+@keyframes msgIn{to{opacity:1; transform:translateY(0);}}
+.msg.user{align-self:flex-end; background:var(--charcoal); color:var(--white); border-bottom-right-radius:6px;}
+[data-theme="dark"] .msg.user{background:var(--lime); color:var(--charcoal);}
+.msg.ai{align-self:flex-start; background:var(--surface); border:1px solid var(--border-c); border-bottom-left-radius:6px;}
+.typing-dots{align-self:flex-start; display:flex; gap:5px; padding:14px 18px; background:var(--surface); border:1px solid var(--border-c); border-radius:18px;}
+.typing-dots span{width:6px; height:6px; border-radius:50%; background:var(--text-muted); animation:blink 1s ease-in-out infinite;}
+.typing-dots span:nth-child(2){animation-delay:.15s;}
+.typing-dots span:nth-child(3){animation-delay:.3s;}
+.chat-suggest{display:flex; gap:8px; flex-wrap:wrap; margin:14px 0;}
+.chip{padding:9px 15px; border-radius:999px; border:1.5px solid var(--border-c); font-weight:700; font-size:13px; background:var(--surface);}
+.chip:hover{border-color:var(--charcoal); transform:translateY(-2px);}
+.chat-input-row{display:flex; gap:10px; margin-top:10px;}
+.chat-input-row input{flex:1; border:1.5px solid var(--border-c); border-radius:16px; padding:14px 18px; font-family:inherit; font-size:14.5px; background:var(--bg); color:var(--text);}
+.chat-send{width:48px; height:48px; border-radius:16px; background:var(--charcoal); color:var(--white); border:none; font-weight:800; flex-shrink:0;}
+[data-theme="dark"] .chat-send{background:var(--lime); color:var(--charcoal);}
+
+/* active workout */
+.workout-screen{background:var(--charcoal); color:var(--white); border-radius:var(--radius-lg); padding:48px 32px; text-align:center; max-width:520px; margin:24px auto 0;}
+.wk-top{font-size:13px; font-weight:700; color:#9BA0A3; margin-bottom:36px;}
+.wk-icon{font-size:64px; margin-bottom:18px;}
+.wk-name{font-size:26px; font-weight:800; margin-bottom:26px; letter-spacing:-0.01em;}
+.wk-ring{position:relative; width:180px; height:180px; margin:0 auto 30px;}
+.wk-ring svg{transform:rotate(-90deg);}
+.wk-num{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:34px; font-weight:800; font-variant-numeric:tabular-nums;}
+.wk-controls{display:flex; gap:10px; justify-content:center; flex-wrap:wrap;}
+.wk-controls button{padding:12px 20px; border-radius:14px; border:1px solid rgba(255,255,255,0.2); background:transparent; color:#fff; font-weight:700; font-size:13.5px;}
+.wk-controls .primary{background:var(--lime); color:var(--charcoal); border-color:var(--lime);}
+.wk-skip{margin-top:16px; font-size:13px; color:#9BA0A3; font-weight:700;}
+
+.complete-screen{text-align:center; max-width:440px; margin:40px auto 0;}
+.complete-screen h1{font-size:34px; font-weight:800; margin-bottom:10px;}
+.complete-screen p.sub{color:var(--text-muted); margin-bottom:26px;}
+.stat-trio{display:flex; justify-content:center; gap:28px; margin-bottom:26px;}
+.stat-trio div .num{font-size:22px; font-weight:800;}
+.stat-trio div .lbl{font-size:11.5px; color:var(--text-muted); font-weight:700;}
+.streak-pill{display:inline-flex; align-items:center; gap:6px; background:var(--mint); color:#3c5a12; font-weight:800; padding:10px 20px; border-radius:999px; margin-bottom:14px;}
+[data-theme="dark"] .streak-pill{background:#22301a; color:var(--lime);}
+.achieve-pill{display:inline-flex; align-items:center; gap:6px; border:1.5px solid var(--border-c); font-weight:800; padding:10px 20px; border-radius:999px; margin-bottom:26px; font-size:13.5px;}
+
+.ach-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:20px;}
+@media (max-width:640px){.ach-grid{grid-template-columns:repeat(2,1fr);}}
+.ach-card{background:var(--surface); border:1px solid var(--border-c); border-radius:16px; padding:20px; text-align:center;}
+.ach-card.locked{opacity:0.4;}
+.ach-card .em{font-size:26px; margin-bottom:8px;}
+.ach-card .t{font-weight:700; font-size:12.5px;}
+
+.toast{
+  position:fixed; bottom:24px; right:24px; background:var(--charcoal); color:var(--white);
+  padding:14px 20px; border-radius:14px; font-weight:700; font-size:14px; z-index:200;
+  transform:translateY(120%); transition:transform .35s ease; box-shadow:0 12px 30px -12px rgba(0,0,0,0.4);
+}
+.toast.show{transform:translateY(0);}
+@media (max-width:860px){.toast{bottom:80px; right:16px; left:16px;}}
+
+.confetti{position:fixed; inset:0; pointer-events:none; z-index:300; overflow:hidden;}
+.confetti span{position:absolute; top:-10px; width:8px; height:8px; background:var(--lime); border-radius:2px; animation:fall 1.6s ease-in forwards;}
+@keyframes fall{to{transform:translateY(100vh) rotate(360deg); opacity:0;}}
+
+:focus-visible{outline:2.5px solid var(--lime-dim); outline-offset:2px;}
+</style>
+</head>
+<body>
+
+<!-- =============== MARKETING SITE =============== -->
+<div id="site">
+
+<nav class="nav" id="mainNav">
+  <div class="nav-logo">FitSnap</div>
+  <div class="nav-center">
+    <a href="#how">How it Works</a>
+    <a href="#features">Features</a>
+    <a href="#coach">AI Coach</a>
+    <a href="#modes">Modes</a>
+    <a href="#faq">FAQ</a>
+  </div>
+  <div class="nav-right">
+    <button class="icon-btn" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+    <button class="btn btn-ghost" onclick="enterApp()">Log in</button>
+    <button class="btn btn-primary" onclick="enterApp()">Start Free →</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid">
+    <div>
+      <span class="badge">✦ AI-POWERED FITNESS</span>
+      <h1>
+        <span class="fade">Don't find time for fitness.</span>
+        <span class="fade">Fit fitness into your time.</span>
+      </h1>
+      <p class="sub">Personalized workouts built around your time, energy, location and fitness level.</p>
+      <div class="hero-ctas">
+        <button class="btn btn-primary" onclick="enterApp()">Start My Fitness Journey →</button>
+        <button class="btn btn-outline" onclick="document.getElementById('five').scrollIntoView({behavior:'smooth'})">Try a 5-Minute Workout</button>
+      </div>
+    </div>
+    <div class="mock-wrap" id="mockWrap">
+      <div class="mock-glow"></div>
+      <div class="mock-ring"></div>
+      <div class="mission-card" id="missionCard">
+        <div class="mission-eyebrow">TODAY'S MISSION</div>
+        <div class="mission-time">10 MIN</div>
+        <div class="mission-title">Full Body Reset</div>
+        <div class="mission-tags">
+          <span class="tag">Beginner</span>
+          <span class="tag">No Equipment</span>
+          <span class="tag">Home</span>
+        </div>
+        <button class="btn btn-primary" onclick="enterApp()">Start Workout →</button>
+      </div>
+      <div class="float-card float-1">🔥 5 Day Streak</div>
+      <div class="float-card float-2">⏱ 47 min this week</div>
+      <div class="float-card float-3">AI matched for you</div>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL PROOF -->
+<div class="strip">
+  <div class="wrap strip-inner">
+    <div class="strip-track">
+      <span><b>Built for real life.</b> Students · Professionals · Travelers · Beginners</span>
+      <span><b>Built for real life.</b> Students · Professionals · Travelers · Beginners</span>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="how">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>Your schedule changes.<br>Your fitness adapts.</h2>
+    </div>
+    <div class="steps">
+      <div class="step-card reveal">
+        <div class="step-num">01</div>
+        <h3>Tell FitSnap your situation</h3>
+        <p>Time, energy, location, equipment, goal — the things that actually decide whether a workout happens today.</p>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-num">02</div>
+        <h3>AI builds your workout</h3>
+        <p>FitSnap creates a workout around your actual situation, not a plan you were supposed to stick to.</p>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-num">03</div>
+        <h3>Start immediately</h3>
+        <p>No planning. No complicated schedules. Just press start.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DAY IS THE WORKOUT PLAN -->
+<section class="section" id="features">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>Your day is the workout plan.</h2>
+      <p>Pick what's happening right now — watch FitSnap build around it.</p>
+    </div>
+    <div class="reveal">
+      <div class="situations" id="situationBtns"></div>
+      <div class="preview-card" id="previewCard"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 MINUTE -->
+<section class="section" id="five">
+  <div class="wrap">
+    <div class="five-wrap">
+      <div>
+        <h2>Only 5 minutes?<br>That's enough.</h2>
+        <p style="color:#B9BDB8; margin-top:16px; max-width:380px;">One short set, no equipment, no excuses. Try it right here.</p>
+      </div>
+      <div>
+        <div class="timer-ring">
+          <svg width="220" height="220">
+            <circle class="bg-ring" cx="110" cy="110" r="96" fill="none" stroke-width="10"></circle>
+            <circle class="fg-ring" id="fgRing" cx="110" cy="110" r="96" fill="none" stroke-width="10" stroke-dasharray="603" stroke-dashoffset="0"></circle>
+          </svg>
+          <div class="timer-label">
+            <div class="timer-num" id="demoTimerNum">00:30</div>
+            <div class="timer-ex" id="demoTimerEx">Squats</div>
+          </div>
+        </div>
+        <div class="timer-controls">
+          <button onclick="demoTimerToggle()" id="demoPlayBtn" class="primary">Start</button>
+          <button onclick="demoTimerReset()">Reset</button>
+          <button onclick="demoTimerNext()">Next</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI GENERATOR -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>Tell FitSnap what's happening.</h2>
+    </div>
+    <div class="ai-card reveal">
+      <div style="font-weight:600; color:var(--text-muted); font-size:14px;">e.g. "I'm in college, have 8 minutes and low energy."</div>
+      <div class="ai-input-row">
+        <input class="ai-input" id="aiInput" placeholder="I'm in college, have 8 minutes and low energy." />
+        <button class="btn btn-primary" onclick="runAIDemo()">Generate My Workout ✦</button>
+      </div>
+      <div class="ai-thinking" id="aiThinking"></div>
+      <div class="ai-result" id="aiResult"></div>
+    </div>
+  </div>
+</section>
+
+<!-- SURPRISE ME -->
+<section class="section">
+  <div class="wrap">
+    <div class="surprise-box reveal">
+      <h2 style="font-size:clamp(26px,4vw,38px); font-weight:800; margin-bottom:10px;">Can't decide? Let FitSnap.</h2>
+      <p style="color:var(--text-muted); margin-bottom:28px;">One tap, one random challenge.</p>
+      <button class="dice-btn" id="diceBtn" onclick="surpriseMe()">🎲 Surprise Me</button>
+      <div class="surprise-result" id="surpriseResult"></div>
+    </div>
+  </div>
+</section>
+
+<!-- MODES -->
+<section class="section" id="modes">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>Wherever you are, FitSnap fits.</h2>
+    </div>
+    <div class="modes">
+      <div class="mode-card mode-travel reveal">
+        <h3>Your hotel room is enough.</h3>
+        <p class="desc">No equipment. Minimal space. Low noise. Nothing that gets you a knock from next door.</p>
+        <div class="mode-tags">
+          <span class="tag">Hotel Room</span><span class="tag">Small Room</span><span class="tag">Outdoor</span><span class="tag">Airport Break</span>
+        </div>
+      </div>
+      <div class="mode-card mode-office reveal">
+        <h3>Turn your workday into movement.</h3>
+        <p class="desc">No floor exercises. No jumping. No equipment required — just your desk and a few minutes.</p>
+        <div class="mode-tags">
+          <span class="tag" style="background:rgba(16,18,20,0.08); color:inherit;">Desk Mobility</span>
+          <span class="tag" style="background:rgba(16,18,20,0.08); color:inherit;">Chair Squats</span>
+          <span class="tag" style="background:rgba(16,18,20,0.08); color:inherit;">Walking Break</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI COACH TEASER -->
+<section class="section" id="coach">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>FitSnap Coach.<br>Your fitness buddy, not your fitness boss.</h2>
+    </div>
+    <div class="card reveal" style="max-width:520px;">
+      <div class="msg ai" style="opacity:1; transform:none; position:static; max-width:100%;">No guilt. Missing one day doesn't erase your progress. Let's restart with 3 minutes today.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="section" id="faq">
+  <div class="wrap">
+    <div class="final-cta reveal">
+      <h2>Your schedule is chaotic.<br>Your fitness doesn't have to be.</h2>
+      <p>Start with 5 minutes. Let FitSnap take care of the rest.</p>
+      <button class="btn btn-primary" style="background:var(--lime); color:var(--charcoal); padding:16px 28px; font-size:16px;" onclick="enterApp()">Start My Fitness Journey →</button>
+      <div class="enabled-row"><span class="dot-pulse"></span> AI personalization enabled</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="nav-logo">FitSnap</div>
+      <p style="color:var(--text-muted); margin-top:8px; font-size:14px;">Fitness that fits your life.</p>
+      <p class="footer-disclaimer">FitSnap provides general fitness information and is not medical advice.</p>
+    </div>
+    <div class="footer-links">
+      <a href="#features">Features</a>
+      <a href="#coach">AI Coach</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Contact</a>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<!-- =============== APP SHELL =============== -->
+<div id="appShell">
+  <div class="mobile-top">
+    <div class="nav-logo">FitSnap</div>
+    <div style="display:flex; gap:8px;">
+      <button class="icon-btn" onclick="toggleTheme()">🌙</button>
+      <button class="icon-btn" onclick="exitApp()">✕</button>
+    </div>
+  </div>
+  <div class="app-layout">
+    <div class="sidebar">
+      <div class="sb-logo">FitSnap</div>
+      <a class="sb-link active" data-view="dashboard" onclick="showView('dashboard', this)">🏠 Home</a>
+      <a class="sb-link" data-view="workout" onclick="showView('workout', this)">🏋️ Workouts</a>
+      <a class="sb-link" data-view="progress" onclick="showView('progress', this)">📈 Progress</a>
+      <a class="sb-link" data-view="chat" onclick="showView('chat', this)">🤖 AI Coach</a>
+      <a class="sb-link" data-view="achievements" onclick="showView('achievements', this)">🏆 History</a>
+      <div class="sb-bottom">
+        <a class="sb-link" onclick="toggleTheme()">🌓 Dark Mode</a>
+        <a class="sb-link" onclick="exitApp()">↩ Exit Prototype</a>
+      </div>
+    </div>
+
+    <div class="app-main">
+      <!-- DASHBOARD -->
+      <div class="view active" id="view-dashboard">
+        <div class="app-topbar">
+          <div class="greet">
+            <h1>Good Morning, Alex 👋</h1>
+            <p>You've got 10 minutes. Let's make them count.</p>
+          </div>
+          <button class="icon-btn" onclick="toggleTheme()" style="display:none;" id="desktopThemeBtn">🌙</button>
+        </div>
+
+        <div class="today-mission" id="todayMission">
+          <div class="left">
+            <div class="eyebrow">TODAY'S MISSION 🔥</div>
+            <div class="time">10 MIN</div>
+            <div class="title">Full Body Reset</div>
+            <div class="mission-tags"><span class="tag">Beginner</span><span class="tag">No Equipment</span><span class="tag">Home</span></div>
+          </div>
+          <button class="btn" style="background:var(--lime); color:var(--charcoal); padding:16px 26px; font-size:15px;" onclick="startWorkout('Full Body Reset', 10, 6)">Start Workout →</button>
+        </div>
+
+        <div class="qa-grid">
+          <div class="qa-card" onclick="quickStart('5-Minute Reset',5,4)"><div class="qa-icon">⏱</div><div class="qa-label">I Have 5 Minutes</div><div class="qa-arrow">→</div></div>
+          <div class="qa-card" onclick="showView('dashboard'); document.getElementById('surpriseBtnApp').scrollIntoView({behavior:'smooth'});"><div class="qa-icon">🎲</div><div class="qa-label">Surprise Me</div><div class="qa-arrow">→</div></div>
+          <div class="qa-card" onclick="quickStart('Hotel Room Circuit',8,5)"><div class="qa-icon">✈️</div><div class="qa-label">Travel Mode</div><div class="qa-arrow">→</div></div>
+          <div class="qa-card" onclick="quickStart('Desk Reset',6,5)"><div class="qa-icon">💼</div><div class="qa-label">Office Mode</div><div class="qa-arrow">→</div></div>
+          <div class="qa-card" onclick="quickStart('Low Energy Flow',5,4)"><div class="qa-icon">🧘</div><div class="qa-label">Low Energy</div><div class="qa-arrow">→</div></div>
+        </div>
+
+        <div class="card" style="margin-top:24px;">
+          <h3 style="font-weight:800; font-size:15px;">How are you feeling today?</h3>
+          <div class="feel-row">
+            <button class="feel-btn" onclick="pickFeel(this,'Low')">😴 Low</button>
+            <button class="feel-btn" onclick="pickFeel(this,'Normal')">🙂 Normal</button>
+            <button class="feel-btn" onclick="pickFeel(this,'High')">🔥 High</button>
+          </div>
+          <div class="feel-msg" id="feelMsg">Perfect. FitSnap adjusted your workout.</div>
+        </div>
+
+        <div class="grid-2col">
+          <div class="card">
+            <h3 style="font-weight:800; font-size:15px;">This Week</h3>
+            <div class="week-row" id="weekRow"></div>
+            <div style="font-weight:700; font-size:13px; color:var(--text-muted);">5 / 7 days active</div>
+          </div>
+          <div class="card">
+            <h3 style="font-weight:800; font-size:15px; margin-bottom:14px;">Snapshot</h3>
+            <div class="stat-row">
+              <div class="stat"><div class="num">47</div><div class="lbl">MIN THIS WEEK</div></div>
+              <div class="stat"><div class="num">8</div><div class="lbl">WORKOUTS</div></div>
+              <div class="stat"><div class="num">5 🔥</div><div class="lbl">DAY STREAK</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="surprise-box" id="surpriseBtnApp" style="margin-top:24px; padding:36px;">
+          <h3 style="font-weight:800; font-size:19px; margin-bottom:6px;">Can't decide?</h3>
+          <p style="color:var(--text-muted); margin-bottom:18px; font-size:14px;">One tap, one random challenge.</p>
+          <button class="dice-btn" style="font-size:15px; padding:14px 26px;" onclick="surpriseMeApp()">🎲 Surprise Me</button>
+          <div class="surprise-result" id="surpriseResultApp"></div>
+        </div>
+      </div>
+
+      <!-- WORKOUT (active / complete) -->
+      <div class="view" id="view-workout">
+        <div id="workoutIdle" style="text-align:center; padding:60px 20px;">
+          <h2 style="font-size:24px; font-weight:800; margin-bottom:10px;">Ready when you are.</h2>
+          <p style="color:var(--text-muted); margin-bottom:24px;">Pick a mission from Home, or start today's.</p>
+          <button class="btn btn-primary" onclick="startWorkout('Full Body Reset', 10, 6)">Start Workout →</button>
+        </div>
+        <div class="workout-screen" id="workoutScreen" style="display:none;">
+          <div class="wk-top" id="wkTop">FULL BODY RESET · Exercise 1 of 6</div>
+          <div class="wk-icon" id="wkIcon">🏋️</div>
+          <div class="wk-name" id="wkName">Wall Push-ups</div>
+          <div class="wk-ring">
+            <svg width="180" height="180">
+              <circle cx="90" cy="90" r="78" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="9"></circle>
+              <circle id="wkFg" cx="90" cy="90" r="78" fill="none" stroke="#C7FF4A" stroke-width="9" stroke-linecap="round" transform="rotate(-90 90 90)" stroke-dasharray="490" stroke-dashoffset="0"></circle>
+            </svg>
+            <div class="wk-num" id="wkNum">00:30</div>
+          </div>
+          <div class="wk-controls">
+            <button onclick="wkPrev()">← Previous</button>
+            <button class="primary" id="wkPauseBtn" onclick="wkTogglePause()">Pause</button>
+            <button onclick="wkNext()">Next →</button>
+          </div>
+          <div class="wk-skip" onclick="wkNext()">Skip</div>
+        </div>
+        <div class="complete-screen" id="workoutComplete" style="display:none;">
+          <div style="font-size:44px;">🔥</div>
+          <h1>You did it.</h1>
+          <p class="sub" id="completeSub">You just invested 10 minutes in yourself.</p>
+          <div class="stat-trio">
+            <div><div class="num" id="cMin">10 min</div><div class="lbl">TIME</div></div>
+            <div><div class="num" id="cEx">6</div><div class="lbl">EXERCISES</div></div>
+            <div><div class="num">1</div><div class="lbl">COMPLETED</div></div>
+          </div>
+          <div><span class="streak-pill">🔥 6 Day Streak</span></div>
+          <div><span class="achieve-pill">⚡ 10-Minute Hero unlocked</span></div>
+          <div style="display:flex; gap:10px; justify-content:center; margin-top:8px;">
+            <button class="btn btn-primary" onclick="showView('dashboard')">Back to Dashboard</button>
+            <button class="btn btn-outline" onclick="toast('Link copied — share your win!')">Share My Win</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROGRESS -->
+      <div class="view" id="view-progress">
+        <h1 style="font-size:26px; font-weight:800;">Your Progress</h1>
+        <p style="color:var(--text-muted); margin-top:4px;">Consistency beats perfection.</p>
+        <div class="grid-2col">
+          <div class="card">
+            <h3 style="font-weight:800; font-size:15px; margin-bottom:16px;">Active Minutes</h3>
+            <div style="display:flex; align-items:flex-end; gap:10px; height:140px;">
+              <div style="flex:1; background:var(--mint); border-radius:8px 8px 0 0; height:40%;"></div>
+              <div style="flex:1; background:var(--mint); border-radius:8px 8px 0 0; height:65%;"></div>
+              <div style="flex:1; background:var(--border-c); border-radius:8px 8px 0 0; height:15%;"></div>
+              <div style="flex:1; background:var(--lime-dim); border-radius:8px 8px 0 0; height:80%;"></div>
+              <div style="flex:1; background:var(--lime-dim); border-radius:8px 8px 0 0; height:55%;"></div>
+              <div style="flex:1; background:var(--border-c); border-radius:8px 8px 0 0; height:10%;"></div>
+              <div style="flex:1; background:var(--lime-dim); border-radius:8px 8px 0 0; height:70%;"></div>
+            </div>
+          </div>
+          <div class="card">
+            <h3 style="font-weight:800; font-size:15px; margin-bottom:14px;">Overview</h3>
+            <div class="stat-row" style="flex-direction:column; gap:14px;">
+              <div class="stat"><div class="num">8</div><div class="lbl">WORKOUTS THIS MONTH</div></div>
+              <div class="stat"><div class="num">47</div><div class="lbl">ACTIVE MINUTES</div></div>
+              <div class="stat"><div class="num">5 🔥</div><div class="lbl">CURRENT STREAK</div></div>
+              <div class="stat"><div class="num">71%</div><div class="lbl">WEEKLY CONSISTENCY</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI COACH CHAT -->
+      <div class="view" id="view-chat">
+        <h1 style="font-size:24px; font-weight:800;">FitSnap Coach 🤖</h1>
+        <p style="color:var(--text-muted); margin-top:2px; margin-bottom:16px;">Your fitness buddy, not your fitness boss.</p>
+        <div class="chat-wrap">
+          <div class="chat-log" id="chatLog">
+            <div class="msg ai">Hey Alex — what's going on today?</div>
+          </div>
+          <div class="chat-suggest">
+            <button class="chip" onclick="sendChat('What should I do today?')">What should I do today?</button>
+            <button class="chip" onclick="sendChat('I have 10 minutes')">I have 10 minutes</button>
+            <button class="chip" onclick="sendChat(\"I'm travelling\")">I'm travelling</button>
+            <button class="chip" onclick="sendChat(\"I'm low energy\")">I'm low energy</button>
+          </div>
+          <div class="chat-input-row">
+            <input id="chatInput" placeholder="Message FitSnap Coach…" onkeydown="if(event.key==='Enter'){sendChat(document.getElementById('chatInput').value)}" />
+            <button class="chat-send" onclick="sendChat(document.getElementById('chatInput').value)">→</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACHIEVEMENTS / HISTORY -->
+      <div class="view" id="view-achievements">
+        <h1 style="font-size:24px; font-weight:800;">Achievements & History</h1>
+        <div class="ach-grid">
+          <div class="ach-card"><div class="em">🏆</div><div class="t">First Workout</div></div>
+          <div class="ach-card"><div class="em">⚡</div><div class="t">10-Minute Hero</div></div>
+          <div class="ach-card"><div class="em">🔥</div><div class="t">7-Day Streak</div></div>
+          <div class="ach-card locked"><div class="em">💪</div><div class="t">10 Workouts</div></div>
+          <div class="ach-card locked"><div class="em">⏱</div><div class="t">60 Min Invested</div></div>
+          <div class="ach-card locked"><div class="em">🌙</div><div class="t">Night Owl</div></div>
+        </div>
+        <div class="card" style="margin-top:24px;">
+          <h3 style="font-weight:800; font-size:15px; margin-bottom:14px;">Recent Workouts</h3>
+          <div class="ex-row"><span class="ex-dot"></span><b>Today</b>&nbsp;— Full Body Reset · 10 min · Completed ✓</div>
+          <div class="ex-row"><span class="ex-dot"></span><b>Yesterday</b>&nbsp;— College Mobility · 8 min · Completed ✓</div>
+          <div class="ex-row"><span class="ex-dot"></span><b>Mon</b>&nbsp;— Desk Reset · 6 min · Completed ✓</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <a class="bn-link active" data-view="dashboard" onclick="showView('dashboard', this)">🏠<span>Home</span></a>
+    <a class="bn-link" data-view="workout" onclick="showView('workout', this)">🏋️<span>Workouts</span></a>
+    <a class="bn-link" data-view="progress" onclick="showView('progress', this)">📈<span>Progress</span></a>
+    <a class="bn-link" data-view="chat" onclick="showView('chat', this)">🤖<span>Coach</span></a>
+    <a class="bn-link" data-view="achievements" onclick="showView('achievements', this)">👤<span>Profile</span></a>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------------- THEME ---------------- */
+function toggleTheme(){
+  const cur = document.documentElement.getAttribute('data-theme');
+  document.documentElement.setAttribute('data-theme', cur==='dark' ? 'light' : 'dark');
+  document.querySelectorAll('#themeToggle').forEach(b=>b.textContent = cur==='dark' ? '🌙' : '☀️');
+}
+document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+/* ---------------- NAV SCROLL ---------------- */
+window.addEventListener('scroll', ()=>{
+  document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 20);
+});
+
+/* ---------------- SCROLL REVEAL ---------------- */
+const io = new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){
+      setTimeout(()=>e.target.classList.add('in'), i*40);
+      io.unobserve(e.target);
+    }
+  });
+}, {threshold:0.15});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* ---------------- HERO TILT ---------------- */
+const mockWrap = document.getElementById('mockWrap');
+const missionCard = document.getElementById('missionCard');
+mockWrap.addEventListener('mousemove', (e)=>{
+  const r = mockWrap.getBoundingClientRect();
+  const x = (e.clientX - r.left)/r.width - 0.5;
+  const y = (e.clientY - r.top)/r.height - 0.5;
+  missionCard.style.transform = `perspective(800px) rotateY(${x*6}deg) rotateX(${-y*6}deg) translateY(-2px)`;
+});
+mockWrap.addEventListener('mouseleave', ()=>{ missionCard.style.transform = ''; });
+
+/* ---------------- SITUATIONS ---------------- */
+const situations = {
+  "I have 5 minutes": {title:"5-MINUTE QUICK HIT", tags:["No Equipment","Beginner Friendly","Home"], ex:["Squats","Push-ups","Marching","Plank Hold"]},
+  "I'm travelling": {title:"8-MINUTE HOTEL RESET", tags:["No Equipment","Small Space","Low Noise"], ex:["Bodyweight Squats","Wall Push-ups","Standing Marches","Calf Raises"]},
+  "I'm at college": {title:"8-MINUTE COLLEGE RESET", tags:["No Equipment","Low Noise","Beginner Friendly"], ex:["Squats","Wall Push-ups","Marching","Mobility"]},
+  "I'm at work": {title:"6-MINUTE DESK RESET", tags:["No Floor Work","No Jumping","No Equipment"], ex:["Chair Squats","Shoulder Mobility","Neck Stretch","Walking Break"]},
+  "I have low energy": {title:"5-MINUTE LOW ENERGY FLOW", tags:["Low Impact","Gentle","Beginner Friendly"], ex:["Slow Stretch Flow","Standing March","Shoulder Rolls","Breathing Reset"]},
+};
+const sitWrap = document.getElementById('situationBtns');
+const previewCard = document.getElementById('previewCard');
+Object.keys(situations).forEach((key,i)=>{
+  const b = document.createElement('button');
+  b.className = 'sit-btn' + (i===0?' active':'');
+  b.textContent = key;
+  b.onclick = ()=>selectSituation(key,b);
+  sitWrap.appendChild(b);
+});
+function selectSituation(key, btn){
+  document.querySelectorAll('.sit-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  previewCard.classList.add('fading');
+  setTimeout(()=>{
+    renderPreview(situations[key]);
+    previewCard.classList.remove('fading');
+  }, 180);
+}
+function renderPreview(s){
+  previewCard.innerHTML = `
+    <div class="preview-title">${s.title}</div>
+    <div class="preview-tags">${s.tags.map(t=>`<span class="tag" style="background:var(--mint); color:#3c5a12;">${t}</span>`).join('')}</div>
+    ${s.ex.map(e=>`<div class="ex-row"><span class="ex-dot"></span>${e}</div>`).join('')}
+  `;
+}
+renderPreview(situations["I have 5 minutes"]);
+
+/* ---------------- DEMO 5-MIN TIMER (landing page) ---------------- */
+let demoTime = 30, demoRunning=false, demoInterval=null;
+const demoCirc = 2*Math.PI*96;
+function updateDemoRing(){
+  const pct = demoTime/30;
+  document.getElementById('fgRing').style.strokeDashoffset = demoCirc*(1-pct);
+  document.getElementById('demoTimerNum').textContent = '00:' + String(demoTime).padStart(2,'0');
+}
+updateDemoRing();
+function demoTimerToggle(){
+  demoRunning = !demoRunning;
+  document.getElementById('demoPlayBtn').textContent = demoRunning ? 'Pause' : 'Start';
+  if(demoRunning){
+    demoInterval = setInterval(()=>{
+      demoTime--;
+      if(demoTime<=0){ demoTime=0; clearInterval(demoInterval); demoRunning=false; document.getElementById('demoPlayBtn').textContent='Start'; }
+      updateDemoRing();
+    },1000);
+  } else { clearInterval(demoInterval); }
+}
+function demoTimerReset(){ clearInterval(demoInterval); demoRunning=false; demoTime=30; document.getElementById('demoPlayBtn').textContent='Start'; updateDemoRing(); }
+function demoTimerNext(){ demoTimerReset(); toast('Next: Push-ups'); }
+
+/* ---------------- AI GENERATOR DEMO ---------------- */
+function runAIDemo(){
+  const thinking = document.getElementById('aiThinking');
+  const result = document.getElementById('aiResult');
+  result.classList.remove('show');
+  thinking.innerHTML = '';
+  thinking.classList.add('show');
+  const lines = ['Understanding your situation…','Checking your time…','Matching your energy…','Building your workout…'];
+  lines.forEach((l,i)=>{
+    setTimeout(()=>{
+      const d = document.createElement('div');
+      d.className='think-line';
+      d.style.animationDelay = '0s';
+      d.innerHTML = `<span class="think-dot"></span> ${l}`;
+      thinking.appendChild(d);
+    }, i*420);
+  });
+  setTimeout(()=>{
+    thinking.classList.remove('show');
+    result.classList.add('show');
+    result.innerHTML = `
+      <div class="result-header">
+        <div class="result-title">8-Minute College Reset</div>
+        <div style="display:flex; gap:6px;"><span class="tag" style="background:var(--mint); color:#3c5a12;">Beginner</span><span class="tag" style="background:var(--mint); color:#3c5a12;">No Equipment</span></div>
+      </div>
+      <div class="block-label">WARM-UP</div>
+      <div class="ex-card">March in place <span class="dur">30s</span></div>
+      <div class="block-label">MAIN WORKOUT</div>
+      <div class="ex-card">Chair Squats <span class="dur">45s</span></div>
+      <div class="ex-card">Wall Push-ups <span class="dur">45s</span></div>
+      <div class="ex-card">Marching <span class="dur">45s</span></div>
+      <div class="ex-card">Rest <span class="dur">30s</span></div>
+      <div class="block-label">COOLDOWN</div>
+      <div class="ex-card">Shoulder Stretch <span class="dur">30s</span></div>
+    `;
+  }, lines.length*420 + 300);
+}
+
+/* ---------------- SURPRISE ME (landing) ---------------- */
+const surprises = [
+  {t:'7-MINUTE NO EQUIPMENT FULL BODY CHALLENGE', tags:['Outdoor','Intermediate','Low Space']},
+  {t:'5-MINUTE STANDING MOBILITY FLOW', tags:['Home','Beginner','No Equipment']},
+  {t:'10-MINUTE STAIRWAY CARDIO BURST', tags:['Outdoor','Intermediate','No Equipment']},
+];
+function surpriseMe(){
+  const btn = document.getElementById('diceBtn');
+  btn.classList.add('spin');
+  setTimeout(()=>btn.classList.remove('spin'), 500);
+  const s = surprises[Math.floor(Math.random()*surprises.length)];
+  const box = document.getElementById('surpriseResult');
+  box.classList.remove('show');
+  setTimeout(()=>{
+    box.innerHTML = `<div class="surprise-card"><div style="font-size:12px; font-weight:800; color:var(--text-muted); margin-bottom:8px;">YOUR RANDOM CHALLENGE</div><div style="font-size:20px; font-weight:800; margin-bottom:14px;">🔥 ${s.t}</div><div class="mission-tags" style="justify-content:center;">${s.tags.map(t=>`<span class="tag" style="background:var(--mint); color:#3c5a12;">${t}</span>`).join('')}</div><button class="btn btn-outline" style="margin-top:16px;" onclick="surpriseMe()">Try Again</button></div>`;
+    box.classList.add('show');
+  }, 200);
+}
+
+/* ---------------- TOAST ---------------- */
+let toastTimer;
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 2600);
+}
+
+/* ================= APP SHELL ================= */
+function enterApp(){
+  document.getElementById('site').style.display='none';
+  document.getElementById('appShell').classList.add('active');
+  window.scrollTo(0,0);
+  initWeekRow();
+}
+function exitApp(){
+  document.getElementById('appShell').classList.remove('active');
+  document.getElementById('site').style.display='block';
+  window.scrollTo(0,0);
+}
+
+function showView(name, el){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  document.querySelectorAll('.sb-link, .bn-link').forEach(l=>l.classList.remove('active'));
+  document.querySelectorAll(`[data-view="${name}"]`).forEach(l=>l.classList.add('active'));
+  window.scrollTo(0,0);
+}
+
+/* week row animation */
+function initWeekRow(){
+  const row = document.getElementById('weekRow');
+  if(row.dataset.built) return;
+  row.dataset.built = '1';
+  const days = ['M','T','W','T','F','S','S'];
+  const active = [true,true,false,true,true,false,true];
+  days.forEach((d,i)=>{
+    const el = document.createElement('div');
+    el.className = 'week-day';
+    el.innerHTML = `<div class="week-dot${active[i]?' filled':''}"></div>${d}`;
+    row.appendChild(el);
+  });
+}
+
+/* feel picker */
+function pickFeel(btn, val){
+  document.querySelectorAll('.feel-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('feelMsg').classList.add('show');
+}
+
+/* surprise in app */
+function surpriseMeApp(){
+  const s = surprises[Math.floor(Math.random()*surprises.length)];
+  const box = document.getElementById('surpriseResultApp');
+  box.classList.remove('show');
+  setTimeout(()=>{
+    box.innerHTML = `<div class="surprise-card" style="margin-top:16px;"><div style="font-size:11px; font-weight:800; color:var(--text-muted); margin-bottom:6px;">YOUR RANDOM CHALLENGE</div><div style="font-size:17px; font-weight:800; margin-bottom:10px;">🔥 ${s.t}</div><div class="mission-tags" style="justify-content:center;">${s.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div></div>`;
+    box.classList.add('show');
+  },150);
+}
+
+/* ---------------- WORKOUT ENGINE ---------------- */
+const exercisePool = ['Bodyweight Squats','Wall Push-ups','Marching in Place','Plank Hold','Standing Mobility','Calf Raises','Shoulder Rolls','Lunges'];
+let wkState = null;
+function buildWorkout(title, minutes, count){
+  const exs = [];
+  for(let i=0;i<count;i++) exs.push(exercisePool[i % exercisePool.length]);
+  return {title, minutes, exercises: exs, idx:0, secondsPerEx: Math.max(20, Math.round((minutes*60)/count/5)*5), timeLeft:0, paused:false, interval:null};
+}
+function quickStart(title, minutes, count){ startWorkout(title, minutes, count); }
+function startWorkout(title, minutes, count){
+  wkState = buildWorkout(title, minutes, count);
+  wkState.timeLeft = wkState.secondsPerEx;
+  document.getElementById('workoutIdle').style.display='none';
+  document.getElementById('workoutComplete').style.display='none';
+  document.getElementById('workoutScreen').style.display='block';
+  showView('workout');
+  document.querySelectorAll('[data-view="workout"]').forEach(l=>l.classList.add('active'));
+  renderWkExercise();
+  wkStartTimer();
+}
+const wkCirc = 2*Math.PI*78;
+function renderWkExercise(){
+  document.getElementById('wkTop').textContent = `${wkState.title.toUpperCase()} · Exercise ${wkState.idx+1} of ${wkState.exercises.length}`;
+  document.getElementById('wkName').textContent = wkState.exercises[wkState.idx];
+  document.getElementById('wkPauseBtn').textContent = 'Pause';
+  updateWkRing();
+}
+function updateWkRing(){
+  const pct = wkState.timeLeft / wkState.secondsPerEx;
+  document.getElementById('wkFg').style.strokeDashoffset = wkCirc*(1-pct);
+  const m = String(Math.floor(wkState.timeLeft/60)).padStart(2,'0');
+  const s = String(wkState.timeLeft%60).padStart(2,'0');
+  document.getElementById('wkNum').textContent = `${m}:${s}`;
+}
+function wkStartTimer(){
+  clearInterval(wkState.interval);
+  wkState.paused = false;
+  wkState.interval = setInterval(()=>{
+    if(wkState.paused) return;
+    wkState.timeLeft--;
+    if(wkState.timeLeft<=0){
+      wkNext();
+    } else {
+      updateWkRing();
+    }
+  },1000);
+}
+function wkTogglePause(){
+  wkState.paused = !wkState.paused;
+  document.getElementById('wkPauseBtn').textContent = wkState.paused ? 'Resume' : 'Pause';
+}
+function wkNext(){
+  if(wkState.idx < wkState.exercises.length-1){
+    wkState.idx++;
+    wkState.timeLeft = wkState.secondsPerEx;
+    renderWkExercise();
+  } else {
+    finishWorkout();
+  }
+}
+function wkPrev(){
+  if(wkState.idx>0){ wkState.idx--; wkState.timeLeft = wkState.secondsPerEx; renderWkExercise(); }
+}
+function finishWorkout(){
+  clearInterval(wkState.interval);
+  document.getElementById('workoutScreen').style.display='none';
+  document.getElementById('workoutComplete').style.display='block';
+  document.getElementById('completeSub').textContent = `You just invested ${wkState.minutes} minutes in yourself.`;
+  document.getElementById('cMin').textContent = wkState.minutes+' min';
+  document.getElementById('cEx').textContent = wkState.exercises.length;
+  fireConfetti();
+}
+function fireConfetti(){
+  const c = document.createElement('div');
+  c.className='confetti';
+  const colors = ['#C7FF4A','#E8F5D0','#101214'];
+  for(let i=0;i<40;i++){
+    const s = document.createElement('span');
+    s.style.left = Math.random()*100+'%';
+    s.style.background = colors[i%colors.length];
+    s.style.animationDelay = (Math.random()*0.4)+'s';
+    s.style.animationDuration = (1.2+Math.random()*0.8)+'s';
+    c.appendChild(s);
+  }
+  document.body.appendChild(c);
+  setTimeout(()=>c.remove(), 2200);
+}
+
+/* ---------------- AI COACH CHAT ---------------- */
+const coachReplies = {
+  "what should i do today?": "Based on your streak, I'd suggest a 10-minute Full Body Reset — you've got the energy for it.",
+  "i have 10 minutes": "Perfect. That's exactly enough for a Full Body Reset. Want me to start it?",
+  "i'm travelling": "No problem — I'll keep it to a Hotel Room Circuit. No equipment, low noise, 8 minutes.",
+  "i'm low energy": "Totally fine. Let's keep it gentle today — a 5-minute Low Energy Flow, no pressure.",
+  "i missed my workout yesterday": "No guilt. Missing one day doesn't erase your progress. Let's restart with 3 minutes today.",
+};
+function sendChat(text){
+  text = (text||'').trim();
+  if(!text) return;
+  const log = document.getElementById('chatLog');
+  const um = document.createElement('div');
+  um.className='msg user';
+  um.textContent = text;
+  log.appendChild(um);
+  document.getElementById('chatInput').value='';
+  log.scrollTop = log.scrollHeight;
+  const typing = document.createElement('div');
+  typing.className='typing-dots';
+  typing.innerHTML='<span></span><span></span><span></span>';
+  log.appendChild(typing);
+  log.scrollTop = log.scrollHeight;
+  setTimeout(()=>{
+    typing.remove();
+    const reply = coachReplies[text.toLowerCase()] || "Got it. I'll factor that in — want me to put together something around it?";
+    const am = document.createElement('div');
+    am.className='msg ai';
+    am.textContent = reply;
+    log.appendChild(am);
+    log.scrollTop = log.scrollHeight;
+  }, 900);
+}
+
+/* dashboard mission mouse glow */
+const tm = document.getElementById('todayMission');
+tm.addEventListener('mousemove', e=>{
+  const r = tm.getBoundingClientRect();
+  tm.style.setProperty('--mx', (e.clientX-r.left)+'px');
+  tm.style.setProperty('--my', (e.clientY-r.top)+'px');
+});
+</script>
+</body>
+</html>
